@@ -1,5 +1,5 @@
 [package]
-name = "bevy_undo"
+name = "bevy-undo"
 version = "0.1.0"
 edition = "2021"
 
@@ -29,7 +29,7 @@ bevy_tweening = { version = "0.8.0", optional = true }
 
 [dev-dependencies]
 bevy_tweening = "0.8.0"
-bevy_undo = { path = "./", features = ["tween"] }
+bevy-undo = { path = "./", features = ["tween"] }
 
 
 [features]

@@ -1,4 +1,5 @@
 #![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)]
 
 use bevy::prelude::*;
 
@@ -8,7 +9,7 @@ pub use undo::Undo;
 use crate::on_undo::OnUndo;
 
 pub mod on_undo;
-pub mod extension;
+mod extension;
 mod undo;
 mod processing;
 
@@ -38,7 +39,7 @@ impl Plugin for UndoPlugin {
 
         #[cfg(feature = "tween")]
         {
-            use extension::tween::tween_completed;
+            use extension::prelude::tween_completed;
             app.add_systems(Update, tween_completed);
         }
     }
@@ -60,7 +61,7 @@ fn undo(
             .remove::<Undo>();
 
         let Some((entity, on_undo)) = qs.pop() else { return; };
-        on_undo.execute(&mut commands, entity);
+        on_undo.execute(&mut commands);
         commands
             .entity(entity)
             .remove::<OnUndo>();
@@ -74,6 +75,7 @@ mod tests {
     use bevy::prelude::{Entity, SpriteBundle};
 
     use crate::{Undo, UndoPlugin};
+    use crate::prelude::EntityCommandsOnUndoExt;
 
     #[test]
     fn undo_twice_on_1frame() {
@@ -104,7 +106,7 @@ mod tests {
             .spawn_empty();
         entity
             .insert(SpriteBundle::default())
-            .on_undo(|command| {
+            .on_undo_with_entity_commands(|command| {
                 command.despawn();
             });
 

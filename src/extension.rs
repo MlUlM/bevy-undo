@@ -1,16 +1,12 @@
-pub use on_undo::CommandsOnUndoExt;
-#[cfg(feature = "tween")]
-pub use tween::{TweenOnUndoExt};
-pub use undo::CommandsUndoExt;
-
 mod on_undo;
 mod undo;
 #[cfg(feature = "tween")]
-pub(crate) mod tween;
+mod tween;
 
 pub mod prelude {
+    pub use crate::extension::on_undo::{CommandsOnUndoExt, EntityCommandsOnUndoExt};
     #[cfg(feature = "tween")]
-    pub use tween::TweenOnUndoExt;
-
-    pub use crate::extension::*;
+    pub(crate) use crate::extension::tween::tween_completed;
+    #[cfg(feature = "tween")]
+    pub use crate::extension::tween::TweenOnUndoExt;
 }

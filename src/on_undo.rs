@@ -36,7 +36,7 @@ impl OnUndo {
 
 
     #[inline]
-    pub(crate) fn execute(&self, commands: &mut Commands, entity: Entity) {
+    pub(crate) fn execute(&self, commands: &mut Commands) {
         self.0.undo(commands);
     }
 }
@@ -48,6 +48,7 @@ mod tests {
 
     use crate::{Undo, UndoPlugin};
     use crate::on_undo::executor::OnUndoBuilder;
+    use crate::prelude::EntityCommandsOnUndoExt;
     use crate::tests::{new_entity, undo};
 
     #[test]
@@ -133,7 +134,11 @@ mod tests {
                 cmd.despawn();
                 cmd.commands().entity(id2).despawn();
             });
-        app.world.entity_mut(id1).insert(on_undo);
+        app
+            .world
+            .entity_mut(id1)
+
+            .insert(on_undo);
         app.update();
 
         app.world.spawn(Undo);

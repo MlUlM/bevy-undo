@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
-use bevy_undo::extension::{CommandsOnUndoExt, CommandsUndoExt};
+
+use bevy_undo::prelude::EntityCommandsOnUndoExt;
 use bevy_undo::UndoPlugin;
 
 fn main() {
@@ -27,7 +28,7 @@ fn setup(
             },
             ..default()
         })
-        .on_undo(|cmd| {
+        .on_undo_with_entity_commands(|cmd| {
             cmd.despawn();
         });
 }
