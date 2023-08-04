@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+
 use bevy_undo::prelude::*;
 
 fn main() {
@@ -10,11 +11,19 @@ fn main() {
         .run();
 }
 
-
 fn setup(
-    mut commands: Commands
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
 ) {
     commands.spawn(Camera2dBundle::default());
+    commands.spawn(TextBundle::from_section(
+        "Press [R]: do undo",
+        TextStyle {
+            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+            font_size: 80.0,
+            color: Color::WHITE,
+        },
+    ));
 
     commands
         .spawn(SpriteBundle {
@@ -28,7 +37,6 @@ fn setup(
         .on_undo_with_entity_commands(|cmd| {
             cmd.despawn();
         });
-
 
     commands
         .spawn(SpriteBundle {
@@ -45,11 +53,7 @@ fn setup(
         });
 }
 
-
-fn keyboard_input_system(
-    mut commands: Commands,
-    key: Res<Input<KeyCode>>,
-) {
+fn keyboard_input_system(mut commands: Commands, key: Res<Input<KeyCode>>) {
     if key.just_pressed(KeyCode::R) {
         commands.undo();
     }

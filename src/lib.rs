@@ -32,6 +32,7 @@ pub(crate) mod test_util {
         let mut entity = app
             .world
             .spawn_empty();
+        
         entity
             .insert(SpriteBundle::default())
             .on_undo_with_entity_commands(|command| {

@@ -15,7 +15,7 @@ fn main() {
         .add_systems(Startup, setup)
         .add_systems(Update, keycode_undo.run_if(not(any_with_component::<Processing>())))
         .add_systems(Update, keycode_move.run_if(not(any_with_component::<Processing>())))
-        .add_systems(Update, undoing)
+        .add_systems(Update, undoing.run_if(any_with_component::<Processing>()))
         .run();
 }
 

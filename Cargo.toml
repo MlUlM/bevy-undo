@@ -2,6 +2,22 @@
 name = "bevy-undo"
 version = "0.1.0"
 edition = "2021"
+authors = ["elm-register <elmprograminfo@gmail.com>"]
+keywords = [
+    "game",
+    "engine",
+    "gamedev",
+    "bevy",
+    "undo"
+]
+
+categories = [
+    "game-engines",
+    "gui",
+]
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/elm-register/bevy-undo"
 
 
 [[example]]
@@ -28,6 +44,17 @@ path = "examples/despawn/two_entities_on_1frame.rs"
 name = "sprite_move"
 path = "examples/tween/sprite_move.rs"
 required-features = ["tween"]
+
+
+
+[[example]]
+name = "entity_command_on_undo_builder"
+path = "examples/extension/entity_command_on_undo_builder.rs"
+
+
+[[example]]
+name = "commands_on_undo_builder"
+path = "examples/extension/commands_on_undo_builder.rs"
 
 
 [dependencies]

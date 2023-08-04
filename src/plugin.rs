@@ -21,7 +21,9 @@ impl Plugin for UndoPlugin {
         #[cfg(feature = "tween")]
         {
             use crate::extension::prelude::tween_completed;
-            app.add_systems(Update, tween_completed);
+            app.add_systems(Update, tween_completed
+                .before(undo)
+            );
         }
     }
 }

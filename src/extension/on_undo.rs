@@ -2,17 +2,37 @@ use bevy::ecs::system::EntityCommands;
 use bevy::ecs::world::EntityMut;
 use bevy::prelude::{Commands, Entity};
 
+use builder::OnUndoBuilderWithCommands;
+
 use crate::on_undo::OnUndoBuilder;
 
-pub trait CommandsOnUndoExt {
-    fn on_undo(&mut self, undo: impl Fn(&mut Commands) + Send + Sync + 'static);
+mod builder;
+mod entity_commands_on_undo_builder;
+
+
+pub mod prelude {
+    pub use crate::extension::on_undo::{CommandsOnUndoExt, EntityCommandsOnUndoExt};
+    pub use crate::extension::on_undo::entity_commands_on_undo_builder::EntityCommandsOnUndoBuilderExt;
 }
 
 
-impl<'w, 's> CommandsOnUndoExt for Commands<'w, 's> {
+pub trait CommandsOnUndoExt<'w, 's, 'd> {
+    fn on_undo(&mut self, on_undo: impl Fn(&mut Commands) + Send + Sync + 'static);
+
+    fn on_undo_builder(&'d mut self) -> OnUndoBuilderWithCommands<'w, 's, 'd>;
+}
+
+
+impl<'w, 's, 'd> CommandsOnUndoExt<'w, 's, 'd> for Commands<'w, 's> {
     #[inline]
-    fn on_undo(&mut self, undo: impl Fn(&mut Commands) + Send + Sync + 'static) {
-        self.spawn(OnUndoBuilder::new().on_undo(undo));
+    fn on_undo(&mut self, on_undo: impl Fn(&mut Commands) + Send + Sync + 'static) {
+        self.spawn(OnUndoBuilder::new().on_undo(on_undo));
+    }
+
+
+    #[inline]
+    fn on_undo_builder(&'d mut self) -> OnUndoBuilderWithCommands<'w, 's, 'd> {
+        OnUndoBuilderWithCommands::new(self)
     }
 }
 
@@ -57,3 +77,7 @@ impl<'w, 's, 'a> EntityCommandsOnUndoExt for EntityCommands<'w, 's, 'a> {
             );
     }
 }
+
+
+
+

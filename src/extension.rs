@@ -4,7 +4,7 @@ mod undo;
 mod tween;
 
 pub mod prelude {
-    pub use crate::extension::on_undo::{CommandsOnUndoExt, EntityCommandsOnUndoExt};
+    pub use crate::extension::on_undo::prelude::*;
     #[cfg(feature = "tween")]
     pub(crate) use crate::extension::tween::tween_completed;
     #[cfg(feature = "tween")]
