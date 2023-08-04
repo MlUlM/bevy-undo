@@ -3,14 +3,13 @@ use bevy::prelude::{Commands, Component, Entity, EventReader, Query, With};
 use bevy::utils::HashMap;
 use bevy_tweening::{Tween, TweenCompleted};
 
-use crate::extension::on_undo::EntityCommandsOnUndoExt;
 use crate::extension::tween::processing::TweenProcessing;
-use crate::Processing;
+use crate::prelude::*;
 
 mod processing;
 
 pub trait TweenOnUndoExt<T>: Sized {
-    fn spawn_processing_until_completed(
+    fn spawn_processing_and_remove_completed(
         self,
         commands: &mut Commands,
     ) -> Tween<T>;
@@ -26,7 +25,7 @@ pub trait TweenOnUndoExt<T>: Sized {
     fn on_undo(
         self,
         commands: &mut Commands,
-        undo: impl Fn(&mut EntityCommands) + Send + Sync + 'static + Clone,
+        on_undo: OnUndo,
     ) -> Tween<T>;
 
 
@@ -43,7 +42,7 @@ pub trait TweenOnUndoExt<T>: Sized {
 #[derive(Component)]
 pub(crate) struct TweenOnUndo {
     user_data: u64,
-    on_undo: Box<dyn TweenOnUndoHandle>,
+    on_undo: OnUndo,
 }
 
 
@@ -78,7 +77,7 @@ trait TweenOnUndoHandle: Send + Sync + 'static {
 
 
 impl<T: Component> TweenOnUndoExt<T> for Tween<T> {
-    fn spawn_processing_until_completed(self, commands: &mut Commands) -> Tween<T> {
+    fn spawn_processing_and_remove_completed(self, commands: &mut Commands) -> Tween<T> {
         commands
             .spawn_empty()
             .insert(Processing)
@@ -101,11 +100,11 @@ impl<T: Component> TweenOnUndoExt<T> for Tween<T> {
     fn on_undo(
         self,
         commands: &mut Commands,
-        on_undo: impl Fn(&mut EntityCommands) + Send + Sync + 'static + Clone,
+        on_undo: OnUndo,
     ) -> Tween<T> {
         commands.spawn(TweenOnUndo {
             user_data: USER_DATA,
-            on_undo: Box::new(TweenOnUndoHandler { handler: on_undo }),
+            on_undo,
         });
 
         self.with_completed_event(USER_DATA)
@@ -156,8 +155,7 @@ pub(crate) fn tween_completed(
                 .remove::<TweenOnUndo>();
 
             commands
-                .entity(*entity)
-                .on_undo_with_entity_commands(tween_on_undo.on_undo.handler());
+                .spawn(tween_on_undo.on_undo.clone());
         }
     }
 }

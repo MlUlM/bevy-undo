@@ -3,23 +3,31 @@ name = "bevy-undo"
 version = "0.1.0"
 edition = "2021"
 
+
 [[example]]
 name = "simple"
 path = "examples/simple.rs"
 
-[[example]]
-name = "despawn"
-path = "examples/despawn.rs"
-
 
 [[example]]
-name = "despawn_2entities"
-path = "examples/despawn_2entities.rs"
+name = "one_entity"
+path = "examples/despawn/one_entity.rs"
 
 
 [[example]]
-name = "despawn_2entities_on_1frame"
-path = "examples/despawn_2entities_on_1frame.rs"
+name = "two_entities"
+path = "examples/despawn/two_entities.rs"
+
+
+[[example]]
+name = "two_entities_on_1frame"
+path = "examples/despawn/two_entities_on_1frame.rs"
+
+
+[[example]]
+name = "sprite_move"
+path = "examples/tween/sprite_move.rs"
+required-features = ["tween"]
 
 
 [dependencies]
@@ -29,8 +37,6 @@ bevy_tweening = { version = "0.8.0", optional = true }
 
 [dev-dependencies]
 bevy_tweening = "0.8.0"
-bevy-undo = { path = "./", features = ["tween"] }
-
 
 [features]
 default = []

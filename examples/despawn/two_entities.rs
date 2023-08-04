@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-
-use bevy_undo::extension::{CommandsOnUndoExt, CommandsUndoExt};
-use bevy_undo::UndoPlugin;
+use bevy_undo::prelude::*;
 
 fn main() {
     App::new()
@@ -27,7 +25,7 @@ fn setup(
             },
             ..default()
         })
-        .on_undo(|cmd| {
+        .on_undo_with_entity_commands(|cmd| {
             cmd.despawn();
         });
 
@@ -42,7 +40,7 @@ fn setup(
             transform: Transform::from_xyz(100., 0., 0.),
             ..default()
         })
-        .on_undo(|cmd| {
+        .on_undo_with_entity_commands(|cmd| {
             cmd.despawn();
         });
 }
@@ -53,7 +51,6 @@ fn keyboard_input_system(
     key: Res<Input<KeyCode>>,
 ) {
     if key.just_pressed(KeyCode::R) {
-        commands.undo();
         commands.undo();
     }
 }

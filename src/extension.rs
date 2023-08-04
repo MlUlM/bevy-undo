@@ -9,4 +9,5 @@ pub mod prelude {
     pub(crate) use crate::extension::tween::tween_completed;
     #[cfg(feature = "tween")]
     pub use crate::extension::tween::TweenOnUndoExt;
+    pub use crate::extension::undo::CommandsUndoExt;
 }

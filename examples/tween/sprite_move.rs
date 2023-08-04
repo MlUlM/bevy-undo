@@ -1,5 +1,6 @@
 #![allow(clippy::type_complexity)]
 
+
 use bevy::prelude::*;
 use bevy_tweening::*;
 use bevy_tweening::lens::TransformPositionLens;
@@ -61,7 +62,16 @@ fn keycode_move(
 ) {
     let mut start_move = move |relative: Vec3| {
         let (entity, transform) = q.single();
+
         let pos = transform.translation;
+        let on_undo = OnUndo::builder()
+            .add_entity(entity)
+            .on_undo(move |cmd, e| {
+                cmd
+                    .entity(e)
+                    .insert((Processing, MovePos(pos)));
+            });
+
         let tween = bevy_tweening::Tween::new(
             EaseMethod::Linear,
             std::time::Duration::from_secs(1),
@@ -70,10 +80,8 @@ fn keycode_move(
                 end: transform.translation + relative,
             },
         )
-            .spawn_processing_until_completed(&mut commands)
-            .on_undo(&mut commands, move |cmd| {
-                cmd.insert(MovePos(pos));
-            });
+            .spawn_processing_and_remove_completed(&mut commands)
+            .on_undo(&mut commands, on_undo);
 
         commands
             .entity(entity)
@@ -109,7 +117,9 @@ fn undoing(
                 end: *move_pos,
             },
         )
-            .spawn_processing_until_completed(&mut commands);
+            .with_completed_entity_commands(&mut commands, |cmd| {
+                cmd.remove::<Processing>();
+            });
 
         commands
             .entity(entity)

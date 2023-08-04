@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use bevy::prelude::*;
 
 pub use crate::on_undo::executor::OnUndoBuilder;
@@ -11,8 +13,8 @@ pub mod prelude {
     pub use crate::on_undo::{OnUndo, OnUndoBuilder};
 }
 
-#[derive(Component)]
-pub struct OnUndo(Box<dyn UndoExecutable>);
+#[derive(Component, Clone)]
+pub struct OnUndo(Arc<dyn UndoExecutable>);
 
 
 impl OnUndo {
@@ -31,7 +33,7 @@ impl OnUndo {
 
     #[inline]
     pub(crate) fn new(exe: impl UndoExecutable + 'static) -> Self {
-        Self(Box::new(exe))
+        Self(Arc::new(exe))
     }
 
 
@@ -46,10 +48,8 @@ impl OnUndo {
 mod tests {
     use bevy::app::App;
 
-    use crate::{Undo, UndoPlugin};
-    use crate::on_undo::executor::OnUndoBuilder;
-    use crate::prelude::EntityCommandsOnUndoExt;
-    use crate::tests::{new_entity, undo};
+    use crate::prelude::*;
+    use crate::test_util::{new_entity, undo};
 
     #[test]
     fn once_undo() {
@@ -129,10 +129,11 @@ mod tests {
         let id2 = app.world.spawn_empty().id();
 
         let on_undo = OnUndoBuilder::new()
+            .add_entity(id1)
             .add_entity(id2)
-            .on_undo(|cmd, id2| {
-                cmd.despawn();
-                cmd.commands().entity(id2).despawn();
+            .on_undo(|cmd, (id1, id2)| {
+                cmd.entity(id1).despawn();
+                cmd.entity(id2).despawn();
             });
         app
             .world

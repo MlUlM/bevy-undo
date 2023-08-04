@@ -1,14 +1,13 @@
 use bevy::prelude::*;
 
-use bevy_undo::extension::{CommandsOnUndoExt, CommandsUndoExt};
-use bevy_undo::UndoPlugin;
+use bevy_undo::prelude::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(UndoPlugin)
         .add_systems(Startup, setup)
-        .add_systems(Update, keyboard_input_system)
+        .add_systems(Update, keycode_undo)
         .run();
 }
 
@@ -18,12 +17,12 @@ fn setup(
 ) {
     commands
         .on_undo(|_| {
-            println!("Undo");
+            println!("Undo!!!!!!");
         });
 }
 
 
-fn keyboard_input_system(
+fn keycode_undo(
     mut commands: Commands,
     key: Res<Input<KeyCode>>,
 ) {

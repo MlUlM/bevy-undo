@@ -1,8 +1,6 @@
 use bevy::prelude::*;
 
-
-use bevy_undo::prelude::EntityCommandsOnUndoExt;
-use bevy_undo::UndoPlugin;
+use bevy_undo::prelude::*;
 
 fn main() {
     App::new()
