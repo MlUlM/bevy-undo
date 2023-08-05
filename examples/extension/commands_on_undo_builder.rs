@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-
 use bevy_undo::prelude::*;
 
 fn main() {
@@ -18,12 +17,9 @@ fn setup(
     let id1 = commands
         .spawn_empty()
         .id();
-
     let id2 = commands
         .spawn_empty()
         .id();
-
-
     let id3 = commands
         .spawn_empty()
         .id();

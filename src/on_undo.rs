@@ -13,6 +13,9 @@ pub mod prelude {
     pub use crate::on_undo::{OnUndo, OnUndoBuilder};
 }
 
+
+
+
 #[derive(Component, Clone)]
 pub struct OnUndo(Arc<dyn UndoExecutable>);
 
@@ -49,7 +52,7 @@ mod tests {
     use bevy::app::App;
 
     use crate::prelude::*;
-    use crate::test_util::{new_entity, undo};
+    use crate::test_util::new_entity;
 
     #[test]
     fn once_undo() {
@@ -61,7 +64,7 @@ mod tests {
         app.update();
         assert!(app.world.get_entity(id).is_some());
 
-        undo(&mut app);
+        app.undo();
         app.update();
         assert!(app.world.get_entity(id).is_none());
     }
@@ -112,7 +115,6 @@ mod tests {
         assert!(app.world.get_entity(id2).is_none());
         assert!(app.world.get_entity(id3).is_none());
 
-
         app.world.spawn(Undo);
         app.update();
         assert!(app.world.get_entity(id1).is_none());
@@ -146,5 +148,21 @@ mod tests {
         app.update();
         assert!(app.world.get_entity(id1).is_none());
         assert!(app.world.get_entity(id2).is_none());
+    }
+
+
+    #[test]
+    fn many_spawn_undo() {
+        let mut app = App::new();
+        app.add_plugins(UndoPlugin);
+
+        let id = new_entity(&mut app);
+        // Undo is not executed unless UndoExecution is issued
+        app.update();
+        assert!(app.world.get_entity(id).is_some());
+
+        app.undo();
+        app.update();
+        assert!(app.world.get_entity(id).is_none());
     }
 }

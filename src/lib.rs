@@ -26,13 +26,13 @@ pub(crate) mod test_util {
     use bevy::app::App;
     use bevy::prelude::{Entity, SpriteBundle};
 
-    use crate::prelude::{EntityCommandsOnUndoExt, Undo};
+    use crate::prelude::EntityCommandsOnUndoExt;
 
     pub(crate) fn new_entity(app: &mut App) -> Entity {
         let mut entity = app
             .world
             .spawn_empty();
-        
+
         entity
             .insert(SpriteBundle::default())
             .on_undo_with_entity_commands(|command| {
@@ -40,10 +40,5 @@ pub(crate) mod test_util {
             });
 
         entity.id()
-    }
-
-
-    pub(crate) fn undo(app: &mut App) {
-        app.world.spawn(Undo);
     }
 }

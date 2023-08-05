@@ -17,8 +17,100 @@ pub mod prelude {
 
 
 pub trait CommandsOnUndoExt<'w, 's, 'd> {
+    /// Add a process to be executed at the time of the undo operation.
+    ///
+    /// If you want to associate more than one entity, use [`CommandsOnUndoExt::on_undo_builder`] instead.
+    ///
+    /// ## Examples
+    ///
+    /// ```rust
+    /// use bevy::prelude::*;
+    /// use bevy_undo::prelude::*;
+    ///
+    /// fn main() {
+    ///     App::new()
+    ///         .add_plugins(DefaultPlugins)
+    ///         .add_plugins(UndoPlugin) // Please add `UndoPlugin`
+    ///         .add_systems(Startup, setup)
+    ///         .add_systems(Update, keycode_undo)
+    ///         .run();
+    /// }
+    ///
+    /// fn setup(
+    ///     mut commands: Commands
+    /// ) {
+    ///     commands
+    ///         .on_undo(|_| {
+    ///             println!("Undo");
+    ///         });
+    /// }
+    ///
+    /// fn keycode_undo(
+    ///     mut commands: Commands,
+    ///     key: Res<Input<KeyCode>>,
+    /// ) {
+    ///     if key.just_pressed(KeyCode::R) {
+    ///         commands.undo();
+    ///     }
+    /// }
+    /// ```
     fn on_undo(&mut self, on_undo: impl Fn(&mut Commands) + Send + Sync + 'static);
 
+
+    /// Add a process to be executed at the time of the undo operation.
+    ///
+    /// ## Notes
+    /// The associated entity may have already been destroyed when the handler is called.
+    ///
+    /// Therefore, use [`Commands::get_entity`] instead of [`Commands::entity`] when using entities that may have been destroyed.
+    ///
+    /// ## Examples
+    ///
+    /// ```rust
+    /// use bevy::prelude::*;
+    /// use bevy_undo::prelude::*;
+    ///
+    /// fn main() {
+    ///     App::new()
+    ///         .add_plugins(DefaultPlugins)
+    ///         .add_plugins(UndoPlugin)
+    ///         .add_systems(Startup, setup)
+    ///         .add_systems(Update, keycode_undo)
+    ///         .run();
+    /// }
+    ///
+    /// fn setup(
+    ///     mut commands: Commands
+    /// ) {
+    ///     let id1 = commands
+    ///         .spawn_empty()
+    ///         .id();
+    ///     let id2 = commands
+    ///         .spawn_empty()
+    ///         .id();
+    ///     let id3 = commands
+    ///         .spawn_empty()
+    ///         .id();
+    ///
+    ///     commands
+    ///         .on_undo_builder()
+    ///         .add_entity(id1)
+    ///         .add_entity(id2)
+    ///         .add_entity(id3)
+    ///         .on_undo(|commands: Commands, (entity1, entity2, entity3)| {
+    ///             println!("undo entity1 = {entity1:?} entity2 = {entity2:?} entity3 = {entity3:?}");
+    ///         });
+    /// }
+    ///
+    /// fn keycode_undo(
+    ///     key: Res<Input<KeyCode>>,
+    ///     mut commands: Commands,
+    /// ) {
+    ///     if key.just_pressed(KeyCode::R) {
+    ///         commands.undo();
+    ///     }
+    /// }
+    /// ```
     fn on_undo_builder(&'d mut self) -> OnUndoBuilderWithCommands<'w, 's, 'd>;
 }
 

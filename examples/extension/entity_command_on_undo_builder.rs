@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-
 use bevy_undo::prelude::*;
 
 fn main() {
@@ -11,13 +10,8 @@ fn main() {
         .run();
 }
 
-
-fn setup(
-    mut commands: Commands
-) {
-    let id1 = commands
-        .spawn_empty()
-        .id();
+fn setup(mut commands: Commands) {
+    let id1 = commands.spawn_empty().id();
 
     commands
         .spawn_empty()
@@ -28,11 +22,7 @@ fn setup(
         });
 }
 
-
-fn keycode_undo(
-    key: Res<Input<KeyCode>>,
-    mut commands: Commands,
-) {
+fn keycode_undo(key: Res<Input<KeyCode>>, mut commands: Commands) {
     if key.just_pressed(KeyCode::R) {
         commands.undo();
     }

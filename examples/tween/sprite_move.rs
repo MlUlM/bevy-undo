@@ -29,9 +29,20 @@ struct MovePos(Vec3);
 
 
 fn setup(
-    mut commands: Commands
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
 ) {
     commands.spawn(Camera2dBundle::default());
+    commands.spawn(TextBundle::from_section(
+        "Press [R]: do undo",
+        TextStyle {
+            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+            font_size: 80.0,
+            color: Color::WHITE,
+        },
+    ));
+
+
     commands
         .spawn(SpriteBundle {
             sprite: Sprite {
