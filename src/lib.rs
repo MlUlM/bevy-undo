@@ -28,7 +28,7 @@ pub(crate) mod test_util {
     use crate::plugin::UndoPlugin;
     use crate::prelude::EntityCommandsOnUndoExt;
 
-    pub(crate) fn new_acapp() -> App {
+    pub(crate) fn new_app() -> App {
         let mut app = App::new();
         app.add_plugins(UndoPlugin);
 
