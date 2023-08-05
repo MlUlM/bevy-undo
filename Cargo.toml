@@ -5,7 +5,6 @@ edition = "2021"
 authors = ["elm-register <elmprograminfo@gmail.com>"]
 keywords = [
     "game",
-    "engine",
     "gamedev",
     "bevy",
     "undo"
@@ -13,7 +12,6 @@ keywords = [
 
 categories = [
     "game-engines",
-    "gui",
 ]
 readme = "README.md"
 license = "MIT OR Apache-2.0"
