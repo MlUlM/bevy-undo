@@ -18,6 +18,9 @@ Here is a simple example that prints `Undo!!!!!!` when you press the R key.when 
 [examples/simple.rs](./examples/simple.rs)
 
 ```rust
+use bevy::prelude::*;
+use bevy_undo::prelude::*;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -31,7 +34,7 @@ fn setup(
     mut commands: Commands
 ) {
     commands
-        .on_undo(|commands: Commands| {
+        .on_undo(|commands: &mut Commands| {
             println!("Undo!!!!!!");
         });
 }
@@ -51,6 +54,9 @@ You can add one or more entities to the argument of `on_undo`. (maximum 12)
 [examples/extension/commands_on_undo_builder.rs](./examples/extension/commands_on_undo_builder.rs)
 
 ```rust
+use bevy::prelude::*;
+use bevy_undo::prelude::*;
+
 fn setup(
     mut commands: Commands
 ) {
@@ -69,7 +75,7 @@ fn setup(
         .add_entity(id1)
         .add_entity(id2)
         .add_entity(id3)
-        .on_undo(|commands: Commands, (entity1, entity2, entity3)| {
+        .on_undo(|commands: &mut Commands, (entity1, entity2, entity3)| {
             println!("undo entity1 = {entity1:?} entity2 = {entity2:?} entity3 = {entity3:?}");
         });
 }
@@ -79,6 +85,9 @@ fn setup(
 In the case of `EntityCommand`, the Entity associated with itself is added as an argument.
 
 ```rust
+use bevy::prelude::*;
+use bevy_undo::prelude::*;
+
 fn setup(mut commands: Commands) {
     commands
         .spawn_empty()
@@ -109,7 +118,8 @@ See [examples/tween/sprite_move.rs](./examples/tween/sprite_move.rs) for details
 
 ### tween
 
-Add methods to [bevy_tweening](https://crates.io/crates/bevy_tweening) for undo operations, callbacks on animation completion, etc
+Add methods to [bevy_tweening](https://crates.io/crates/bevy_tweening) for undo operations, callbacks on animation
+completion, etc
 
 ## Compatible Bevy versions
 
