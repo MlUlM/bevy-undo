@@ -9,13 +9,13 @@ keywords = [
     "bevy",
     "undo"
 ]
-
 categories = [
     "game-engines",
 ]
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/elm-register/bevy-undo"
+description = "This crate makes it easy to use the undo-operation on bevy"
 
 
 [[example]]
