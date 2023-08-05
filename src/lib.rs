@@ -25,8 +25,16 @@ pub mod prelude {
 pub(crate) mod test_util {
     use bevy::app::App;
     use bevy::prelude::{Entity, SpriteBundle};
-
+    use crate::plugin::UndoPlugin;
     use crate::prelude::EntityCommandsOnUndoExt;
+
+    pub(crate) fn new_acapp() -> App {
+        let mut app = App::new();
+        app.add_plugins(UndoPlugin);
+
+        app
+    }
+
 
     pub(crate) fn new_entity(app: &mut App) -> Entity {
         let mut entity = app

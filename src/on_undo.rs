@@ -14,8 +14,6 @@ pub mod prelude {
 }
 
 
-
-
 #[derive(Component, Clone)]
 pub struct OnUndo(Arc<dyn UndoExecutable>);
 
@@ -49,15 +47,12 @@ impl OnUndo {
 
 #[cfg(test)]
 mod tests {
-    use bevy::app::App;
-
     use crate::prelude::*;
-    use crate::test_util::new_entity;
+    use crate::test_util::{new_app, new_entity};
 
     #[test]
     fn once_undo() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id = new_entity(&mut app);
         // Undo is not executed unless UndoExecution is issued
@@ -72,8 +67,7 @@ mod tests {
 
     #[test]
     fn two_undo() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id1 = new_entity(&mut app);
         let id2 = new_entity(&mut app);
@@ -97,8 +91,7 @@ mod tests {
 
     #[test]
     fn three_undo() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id1 = new_entity(&mut app);
         let id2 = new_entity(&mut app);
@@ -125,8 +118,7 @@ mod tests {
 
     #[test]
     fn non_attach() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
         let id1 = app.world.spawn_empty().id();
         let id2 = app.world.spawn_empty().id();
 
@@ -153,8 +145,7 @@ mod tests {
 
     #[test]
     fn many_spawn_undo() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id = new_entity(&mut app);
         // Undo is not executed unless UndoExecution is issued

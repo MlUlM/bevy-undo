@@ -3,7 +3,6 @@ use bevy::prelude::*;
 
 use crate::prelude::{OnUndo, Processing, Undo};
 
-
 /// Add undo-operations to an app.
 #[derive(Debug, Default, Eq, PartialEq, Copy, Clone, Hash)]
 pub struct UndoPlugin;
@@ -79,15 +78,12 @@ fn clear_all_undo(
 
 #[cfg(test)]
 mod tests {
-    use bevy::app::App;
-
     use crate::prelude::*;
-    use crate::test_util::new_entity;
+    use crate::test_util::{new_app, new_entity};
 
     #[test]
     fn undo_twice_on_1frame() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id1 = new_entity(&mut app);
         let id2 = new_entity(&mut app);
@@ -104,8 +100,7 @@ mod tests {
 
     #[test]
     fn undo_processing() {
-        let mut app = App::new();
-        app.add_plugins(UndoPlugin);
+        let mut app = new_app();
 
         let id1 = new_entity(&mut app);
         let processing = app

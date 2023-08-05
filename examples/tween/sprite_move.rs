@@ -42,7 +42,6 @@ fn setup(
         },
     ));
 
-
     commands
         .spawn(SpriteBundle {
             sprite: Sprite {
