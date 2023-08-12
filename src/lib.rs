@@ -11,6 +11,8 @@ mod extension;
 mod undo;
 mod processing;
 mod plugin;
+#[cfg(feature = "tween")]
+mod tween;
 
 
 pub mod prelude {
@@ -18,6 +20,8 @@ pub mod prelude {
         extension::prelude::*, on_undo::prelude::*, plugin::UndoPlugin, processing::Processing,
         undo::Undo,
     };
+    #[cfg(feature = "tween")]
+    pub use crate::tween::UndoTweenPlugin;
 }
 
 
@@ -25,6 +29,7 @@ pub mod prelude {
 pub(crate) mod test_util {
     use bevy::app::App;
     use bevy::prelude::{Entity, SpriteBundle};
+
     use crate::plugin::UndoPlugin;
     use crate::prelude::EntityCommandsOnUndoExt;
 

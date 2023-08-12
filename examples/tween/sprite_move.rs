@@ -10,7 +10,7 @@ use bevy_undo::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugins(UndoPlugin)
+        .add_plugins((UndoPlugin, UndoTweenPlugin))
         .add_plugins(TweeningPlugin)
         .add_systems(Startup, setup)
         .add_systems(Update, keycode_undo.run_if(not(any_with_component::<Processing>())))
@@ -74,6 +74,7 @@ fn keycode_move(
         let (entity, transform) = q.single();
 
         let pos = transform.translation;
+
         let on_undo = OnUndo::builder()
             .add_entity(entity)
             .on_undo(move |cmd, e| {
