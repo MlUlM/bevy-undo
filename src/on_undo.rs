@@ -20,6 +20,16 @@ pub struct OnUndo(Arc<dyn UndoExecutable>);
 
 impl OnUndo {
     #[inline]
+    pub fn join_all(undo_list: Vec<OnUndo>) -> Self {
+        OnUndo::on_undo(move |cmd| {
+            for u in undo_list.iter() {
+                u.0.undo(cmd);
+            }
+        })
+    }
+
+
+    #[inline]
     pub const fn builder() -> OnUndoBuilder {
         OnUndoBuilder::new()
     }
