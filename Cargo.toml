@@ -1,6 +1,6 @@
 [package]
 name = "bevy-undo"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 authors = ["elm-register <elmprograminfo@gmail.com>"]
 keywords = [
@@ -17,52 +17,3 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/elm-register/bevy-undo"
 description = "This crate makes it easy to use the undo-operation on bevy"
 
-
-[[example]]
-name = "simple"
-path = "examples/simple.rs"
-
-
-[[example]]
-name = "one_entity"
-path = "examples/despawn/one_entity.rs"
-
-
-[[example]]
-name = "two_entities"
-path = "examples/despawn/two_entities.rs"
-
-
-[[example]]
-name = "two_entities_on_1frame"
-path = "examples/despawn/two_entities_on_1frame.rs"
-
-
-[[example]]
-name = "sprite_move"
-path = "examples/tween/sprite_move.rs"
-required-features = ["tween"]
-
-
-
-[[example]]
-name = "entity_command_on_undo_builder"
-path = "examples/extension/entity_command_on_undo_builder.rs"
-
-
-[[example]]
-name = "commands_on_undo_builder"
-path = "examples/extension/commands_on_undo_builder.rs"
-
-
-[dependencies]
-bevy = "0.11.0"
-itertools = "0.11.0"
-bevy_tweening = { version = "0.8.0", optional = true }
-
-[dev-dependencies]
-bevy_tweening = "0.8.0"
-
-[features]
-default = []
-tween = ["bevy_tweening"]
