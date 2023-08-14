@@ -1,1 +1,0 @@
-/// This crate was deprecated; please use [`bevy-undo2`](https://crates.io/crates/bevy-undo2) instead.
